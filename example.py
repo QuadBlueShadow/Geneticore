@@ -11,6 +11,4 @@ f_c = FC(num_nets=N_NETS, divisor=10) #Not needed, just makes it easier to track
 
 alg.make_nets() #The first nets we are going to use
 
-fitnesses = []
-
-t_loop = Loop()
+t_loop = Loop(alg=alg, f_c=f_c, steps=1_000)
