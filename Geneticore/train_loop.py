@@ -13,7 +13,7 @@ class Loop:
     if self.c_step >= self.steps:
       fitnesses = self.f_c.get_fitnesses() #Do this when you need to make a new generation
     
-    self.alg.step(rewards, fitnesses) #Rewards for that step, fitnesses only need to be inputted on the step optimization happens
+    self.alg.step(rewards, fitnesses) #Rewards for that step, fitnesses only needs to be inputted on the step optimization happens
 
     if self.c_step >= self.steps:
       fitnesses = self.f_c.clear() #Make sure to clear the past generation's fitnesses
