@@ -11,4 +11,4 @@ f_c = FC(num_nets=N_NETS, divisor=10) #Not needed, just makes it easier to track
 
 alg.make_nets() #The first nets we are going to use
 
-t_loop = Loop(alg=alg, f_c=f_c, steps=1_000)
+t_loop = Loop(alg=alg, f_c=f_c, steps=1_000) #Simple training loop that handles everything. Make sure to change the acutal loop code to adjust to your env. There will be a base env connector soon.
