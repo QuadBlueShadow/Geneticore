@@ -9,10 +9,13 @@ class FC:
 
   def calc(self, rewards=[]):
     for i in range(len(rewards)):
-      self.fitnesses[i] = rewards[i]/self.divisor
+      curr_rewards = rewards[i]
+
+      for x in range(len(curr_rewards)):
+        self.fitnesses[i] += curr_rewards[x]/self.divisor
 
   def clear(self):
-    for i in range(self.fitnesses):
+    for i in range(len(self.fitnesses)):
       self.fitnesses[i] = 0
   
   def get_fitnesses(self):

@@ -13,20 +13,20 @@ def leaky_relu(x):
 
 class Neuron:
   def __init__(self, num):
-    self.o_weights = []
+    self.weights = []
 
     for i in range(num):
-      self.o_weights.append(r.random())
+      self.weights.append(r.random())
 
-  def run(self, input, first=False):
+  def run(self, input):
     outputs = []
 
     #Leaky relu activation for the input, change this if you want or whatever
     a_in = leaky_relu(input)
 
     #Get each individual weights output
-    for i in range(len(self.o_weights)):
-      outputs.append(a_in * self.o_weights[i])
+    for i in range(len(self.weights)):
+      outputs.append(a_in * self.weights[i])
 
     return outputs
 
@@ -36,9 +36,9 @@ class Neuron:
       #Set the modifier, are we adding or subtracting from this weight
       modifier = 0
       if r.randint(0, 1) == 0:
-        modifier = r.random() / 10
+        modifier = r.random() / 5
       else:
-        modifier = -1 * (r.random() / 10)
+        modifier = -1 * (r.random() / 5)
 
       #Change weight
       self.weights[i] += modifier

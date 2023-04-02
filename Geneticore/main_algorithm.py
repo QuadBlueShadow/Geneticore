@@ -1,3 +1,5 @@
+import pickle
+
 #CR stands for Completely Random adjustments
 class CRGeneticAlg:
   def __init__(self, base_net=None, steps=1_000, num_nets=5):
@@ -34,6 +36,9 @@ class CRGeneticAlg:
     if best_net:
       self.best_net = self.base_net
 
+  def give_nets(self):
+    return self.nets
+
   def choose_best_net(self, fitnesses=[]):
     #Put nets and fitness into one array
     info = []
@@ -41,16 +46,16 @@ class CRGeneticAlg:
       info.append([self.nets[i], fitnesses[i]])
 
     #Find best net
-    max_fitness = 0
+    #max_fitness = 0
     
     for net, fitness in info:
-      if fitness > max_fitness:
-        max_fitness = fitness
+      if fitness > self.max_fitness:
+        self.max_fitness = fitness
         self.best_net = net
 
       #Track the absolute best fitness
-      if fitness > self.max_fitness:
-        self.max_fitness = fitness
+      # if fitness > self.max_fitness:
+      #   self.max_fitness = fitness
 
   def calculate_reward(self, rewards):
     for reward in rewards:
@@ -67,14 +72,21 @@ class CRGeneticAlg:
       self.clear_nets()
       self.make_nets()
       self.print_stats()
+      self.generation += 1
     else:
       #Track the average reward of the generation
       self.calculate_reward(rewards)
-      
+      self.c_step += 1
       return self.nets
+    
+  def save_best_net(self):
+    pickle_out = open("model.pickle","wb")
+    pickle.dump(self.best_net, pickle_out)
+    pickle_out.close()
 
   def print_stats(self):
     print("Generation:", self.generation)
     print("avg_reward:", self.avg_reward)
     print("max_fitness:", self.max_fitness)
-    print("num_nets", self.num)
+    print("num_nets:", self.num)
+    print(" ")
