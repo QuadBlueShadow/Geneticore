@@ -1,8 +1,7 @@
 #Easily keep track of fitnesses to use in the algorithm
 class FC:
-  def __init__(self, num_nets=1, divisor=10):
+  def __init__(self, num_nets=1):
     self.fitnesses = []
-    self.divisor = divisor
 
     for i in range(num_nets):
       self.fitnesses.append(0)
@@ -11,8 +10,7 @@ class FC:
     for i in range(len(rewards)):
       curr_rewards = rewards[i]
 
-      for x in range(len(curr_rewards)):
-        self.fitnesses[i] += curr_rewards[x]/self.divisor
+      self.fitnesses[i] = sum(curr_rewards)
 
   def clear(self):
     for i in range(len(self.fitnesses)):

@@ -1,19 +1,13 @@
-import numpy as np
-
 class Loop:
-  def __init__(self, alg, f_c, steps=1_000, env=None):
+  def __init__(self, alg, f_c, env=None):
     self.alg = alg
     self.f_c = f_c
-    self.steps = steps
-    self.c_step = 0
     self.env = env
     
-  def training_loop(self, rendering=True):
+  def training_loop(self):
     try:
       while True:
-        if self.c_step >= self.steps+1:
-          self.c_step = 0
-
+        #Setup our nets and rewards
         nets = self.alg.give_nets()
         rewards = []
         total_rewards = []
@@ -21,12 +15,14 @@ class Loop:
         for i in range(len(nets)):
           net = nets[i]
           done = False
+          truncated = False
 
           obs, info = self.env.reset()
 
           net_rewards = []
 
-          while not done:
+          #Standard gymnasium stuff
+          while not done and not truncated:
             action = net.run(obs)
             obs, reward, done, truncated, info = self.env.step(action)
 
@@ -34,9 +30,6 @@ class Loop:
             total_rewards.append(reward)
         
             obs = obs.flatten()
-
-            if rendering:
-              self.env.render()
 
           rewards.append(net_rewards)
 
@@ -47,9 +40,8 @@ class Loop:
         self.alg.step(total_rewards, fitnesses) #Rewards for that step, fitnesses only need to be inputted on the step optimization happens
 
         fitnesses = self.f_c.clear() #Make sure to clear the past generation's fitnesses
-
-        self.c_step += 1
         
     except KeyboardInterrupt:
+      #Easy way of saving models
       self.alg.save_best_net()
       print("Exiting training")

@@ -1,18 +1,21 @@
 import gymnasium as gym
 from Geneticore.loading import load_model
 
-model = load_model()
+model, te, f = load_model("model_65_episodes.pickle")
 
-env = gym.make("MountainCar-v0", 
+env = gym.make("CartPole-v1", 
                render_mode="human"
                )
 
-while True:
-    obs, info = env.reset()
-    done = False
+try:
+    while True:
+        obs, info = env.reset()
+        done = False
 
-    while not done:
-        action = model.run(obs)
-        obs, reward, done, truncated, info = env.step(action)
+        while not done:
+            action = model.run(obs)
+            obs, reward, done, truncated, info = env.step(action)
 
-        env.render()
+            env.render()
+except KeyboardInterrupt:
+    print("Exiting")

@@ -1,10 +1,5 @@
 import random as r
 from numpy import exp
-
-def softmax(activations):
-  e = exp(activations)
-  return e / e.sum()
-
 def leaky_relu(x):
   if x > 0:
     return x
@@ -83,8 +78,9 @@ class Layer:
       neuron.random_adjust_w()
 
 class Net:
-  def __init__(self, net_arr=[1, 64, 64, 1]):
+  def __init__(self, net_arr=[1, 64, 64, 1], act_parser=None):
     self.layers = []
+    self.act_parser = act_parser
 
     #Make the layer of the neural net
     for i in range(len(net_arr)):
@@ -117,8 +113,7 @@ class Net:
         p_l = layer.run(p_l)
 
     #Grab the net's output
-    activations = softmax(p_l)
-    out = self.find_output(activations)
+    out = self.act_parser.parse(p_l)
 
     return out
 
