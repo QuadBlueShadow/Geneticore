@@ -1,3 +1,4 @@
+import numpy as np
 from numpy import exp
 
 class DiscreteAction:
@@ -34,3 +35,26 @@ class ContiniousAction:
     output = self.graph_fun(activation, self.range)
 
     return output
+  
+#Make a lookup table of all actions
+#Works as a multidiscrete action
+class LookupAction(DiscreteAction):
+    def __init__(self, bins=[(-1, 0, 1)] * 5):
+        self.act_bins = bins
+
+        self._lookup_table = self.make_lookup_table(self.act_bins)
+
+        self.bins = len(self._lookup_table)
+
+    def make_lookup_table(self, bins):
+        actions = []
+        #Write your lookup algorithm here
+        actions = np.array(actions)
+        return actions
+
+    def return_act_space(self):
+      return self.bins
+
+    def parse_actions(self, activations) -> np.ndarray:
+        action = self.parse(activations)
+        return self._lookup_table[action]

@@ -3,8 +3,7 @@ from Geneticore.algorithms import CRGeneticAlg
 from Geneticore.fitness_calculator import FC
 from Geneticore.train_loop import Loop
 from Geneticore.loading import load_model
-from Geneticore.action_parsers import DiscreteAction, ContiniousAction
-from Geneticore.tools.cont_p_graph_f import ranged_sigmoid
+from Geneticore.action_parsers import DiscreteAction, LookupAction
 
 import gymnasium as gym
 
