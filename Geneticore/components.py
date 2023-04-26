@@ -29,7 +29,7 @@ class Net:
     self.layers = []
     self.act_parser = act_parser
     #Make the layer of the neural net
-    for i in range(len(net_arr)-2):
+    for i in range(len(net_arr)-1):
       self.layers.append(Layer(net_arr[i], net_arr[i + 1], act_fun))
 
   def find_output(self, activations):
