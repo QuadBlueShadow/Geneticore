@@ -6,10 +6,7 @@ class FC:
     self.fitnesses = []
 
   def calc(self, rewards=[]):
-    for cr in rewards:
-      self.fitnesses.append(sum(cr))
-
-    self.fitnesses = np.asarray(self.fitnesses)
+    self.fitnesses = self.fitnesses + [sum(cr) for cr in rewards]
 
   def clear(self):
     self.fitnesses = []

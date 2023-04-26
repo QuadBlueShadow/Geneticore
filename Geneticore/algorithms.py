@@ -1,7 +1,8 @@
 import pickle
+import time
 
 class CRGeneticAlg:
-  def __init__(self,  base_net=None, episodes_per_gen=1, num_nets=5, t_episodes=0, max_fitness=-10000):
+  def __init__(self,  base_net=None, episodes_per_gen=1, num_nets=5, total_episodes=0, max_fitness=-10000):
     #Know when to optimize things
     self.episodes_per_gen = episodes_per_gen
     self.c_episode = 0
@@ -12,19 +13,20 @@ class CRGeneticAlg:
     #Net stuff
     self.best_net = base_net
     self.nets = []
-    self.num = num_nets
+    self.num_nets = num_nets
     self.abs_best = base_net
 
     #Cool info
     self.generation = 1
     self.max_fitness = max_fitness
     self.avg_reward = 0
-    self.t_episodes = t_episodes
+    self.total_episodes = total_episodes
+    self.start = time.time()
 
   def make_nets(self):
     #Create a net from the base and make small random adjustments to the weights
-    for i in range(self.num):
-      if i < self.num/10:
+    for i in range(self.num_nets):
+      if i < self.num_nets/10:
         new_net = self.abs_best
         new_net.randomly_adjust_net()
         self.nets.append(new_net)
@@ -76,28 +78,26 @@ class CRGeneticAlg:
     if self.c_episode >= self.episodes_per_gen:
       #Reset things and make a new set of nets
       self.c_episode = 0
-      m_f = self.choose_best_net(fitnesses)
+      max_fitness = self.choose_best_net(fitnesses)
       self.clear_nets()
       self.make_nets()
-      self.print_stats(m_f)
       self.generation += 1
+      self.print_stats(max_fitness)
+
     else:
       #Track the average reward of the generation
       self.calculate_reward(rewards)
       self.c_episode += 1
-      self.t_episodes += 1
+      self.total_episodes += 1
       return self.nets
     
   def save_best_net(self):
+    #Saves best model
     print("MAX FITNESS:", self.max_fitness)
-    pickle_out = open(f"model_{self.t_episodes}_episodes.pickle","wb")
-    pickle.dump([self.abs_best, self.t_episodes, self.max_fitness], pickle_out)
-    pickle_out.close()
+    with open(f"model_{self.total_episodes}_episodes.pickle","wb") as f:
+      pickle.dump([self.abs_best, self.total_episodes, self.max_fitness], f)
+      f.close()
 
   def print_stats(self, max_g_fitness):
-    print("Generation:", self.generation)
-    print("avg_reward:", self.avg_reward)
-    print("max_fitness:", self.max_fitness)
-    print("max_generation_fitness:", max_g_fitness)
-    print("num_nets:", self.num)
-    print(" ")
+    #But one line funny --CTA
+    print(f"Generation: {self.generation}\nAvg_Reward: {self.avg_reward}\nMax_Generation_Fitness {max_g_fitness}\nMax_Fitness: {self.max_fitness}\nNum_Nets: {self.num_nets}\n\n")

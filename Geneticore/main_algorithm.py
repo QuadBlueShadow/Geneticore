@@ -4,15 +4,12 @@ class CRGeneticAlg:
     #Know when to optimize things
     self.steps = steps
     self.c_step = 0
-    
     #Keep this here just in case
     self.base_net = base_net
-
     #Net stuff
     self.best_net = base_net
     self.nets = []
-    self.num = num_nets
-
+    self.num_nets = num_nets
     #Cool info
     self.generation = 1
     self.max_fitness = 0
@@ -20,11 +17,10 @@ class CRGeneticAlg:
 
   def make_nets(self):
     #Create a net from the base and make small random adjustments to the weights
-    for i in range(self.num):
+    for i in range(self.num_nets):
       new_net = self.best_net
       new_net.randomly_adjust_net()
       self.nets.append(new_net)
-
     return self.nets
 
   def clear_nets(self, best_net=False):
@@ -39,15 +35,12 @@ class CRGeneticAlg:
     info = []
     for i in range(len(self.nets)):
       info.append([self.nets[i], fitnesses[i]])
-
     #Find best net
     max_fitness = 0
-    
     for net, fitness in info:
       if fitness > max_fitness:
         max_fitness = fitness
         self.best_net = net
-
       #Track the absolute best fitness
       if fitness > self.max_fitness:
         self.max_fitness = fitness
@@ -70,11 +63,7 @@ class CRGeneticAlg:
     else:
       #Track the average reward of the generation
       self.calculate_reward(rewards)
-      
       return self.nets
 
   def print_stats(self):
-    print("Generation:", self.generation)
-    print("avg_reward:", self.avg_reward)
-    print("max_fitness:", self.max_fitness)
-    print("num_nets", self.num)
+    print(f"Generation: {self.generation}\nAvg_Reward: {self.avg_reward}\nMax_Fitness: {self.max_fitness}\nNum_Nets: {self.num_nets}")

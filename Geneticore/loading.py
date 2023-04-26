@@ -1,6 +1,7 @@
 import pickle
 
 def load_model(name="model.pickle"):
-    pickle_in = open(name,"rb")
-    model = pickle.load(pickle_in)
+    with open(name,"rb") as f:
+        model = pickle.load(f)
+        f.close()
     return model
