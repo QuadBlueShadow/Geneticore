@@ -54,17 +54,17 @@ class Loop:
       while True:
         #Setup our nets and rewards
         nets = self.alg.give_nets()
-        rewards = np.array([])
-        total_rewards = np.array([])
+        rewards = []
+        total_rewards = []
 
         for i in range(len(nets)):
           net = nets[i]
           done = False
           truncated = False
 
-          obs = self.env.reset()
+          obs, info = self.env.reset()
 
-          net_rewards = np.array([])
+          net_rewards = []
 
           #Standard gymnasium stuff
           while not done and not truncated:
