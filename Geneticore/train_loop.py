@@ -35,7 +35,7 @@ class Loop:
 
           rewards.append(net_rewards)
 
-        self.f_c.calc(np.asarray(rewards)) #Track fitness
+        self.f_c.calc(rewards) #Track fitness
 
         fitnesses = self.f_c.get_fitnesses() #Do this when you need to make a new generation
 
