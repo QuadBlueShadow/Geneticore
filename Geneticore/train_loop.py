@@ -1,5 +1,3 @@
-import numpy as np
-
 class Loop:
   def __init__(self, alg, f_c, env=None):
     self.alg = alg
