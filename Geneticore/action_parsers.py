@@ -25,7 +25,7 @@ class DiscreteAction:
 
     return output
   
-  def return_act_space(self):
+  def get_action_space(self):
       return self.bins
   
   def parse_actions(self, activations):
