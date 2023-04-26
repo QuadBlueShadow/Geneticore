@@ -13,7 +13,7 @@ class Loop:
         #Setup our nets and rewards
         nets = self.alg.give_nets()
         rewards = []
-        total_rewards = np.array([])
+        total_rewards = []
 
         for i in range(len(nets)):
           net = nets[i]
@@ -21,15 +21,15 @@ class Loop:
 
           obs = self.env.reset()
 
-          net_rewards = np.array([])
+          net_rewards = []
 
           #Standard gymnasium stuff
           while not done:
             action = net.run(obs)
             obs, reward, done, info = self.env.step(action)
 
-            net_rewards = np.append(net_rewards, reward)
-            total_rewards = np.append(total_rewards, reward)
+            net_rewardsappend(reward)
+            total_rewardsappend(reward)
         
             obs = obs.flatten()
 
