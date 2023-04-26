@@ -1,15 +1,8 @@
-from Geneticore.action_parsers import DiscreteAction
+from Geneticore.action_parsers import LookupAction
 import numpy as np
 
 #Tailored to rocket league, taken from rlgym
-class RL_LookupAction(DiscreteAction):
-    def __init__(self, bins=[(-1, 0, 1)] * 5):
-        self.act_bins = bins
-
-        self._lookup_table = self.make_lookup_table(self.act_bins)
-
-        self.bins = len(self._lookup_table)
-
+class RL_LookupAction(LookupAction):
     def make_lookup_table(self, bins):
         actions = []
         # Ground
@@ -36,10 +29,3 @@ class RL_LookupAction(DiscreteAction):
 
         actions = np.array(actions)
         return actions
-
-    def return_act_space(self):
-      return self.bins
-
-    def parse_actions(self, activations) -> np.ndarray:
-        action = self.parse(activations)
-        return self._lookup_table[action]

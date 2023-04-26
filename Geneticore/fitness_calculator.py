@@ -1,20 +1,18 @@
+import numpy as np
+
 #Easily keep track of fitnesses to use in the algorithm
 class FC:
-  def __init__(self, num_nets=1):
+  def __init__(self):
     self.fitnesses = []
 
-    for i in range(num_nets):
-      self.fitnesses.append(0)
-
   def calc(self, rewards=[]):
-    for i in range(len(rewards)):
-      curr_rewards = rewards[i]
+    for cr in rewards:
+      self.fitnesses.append(sum(cr))
 
-      self.fitnesses[i] = sum(curr_rewards)
+    self.fitnesses = np.asarray(self.fitnesses)
 
   def clear(self):
-    for i in range(len(self.fitnesses)):
-      self.fitnesses[i] = 0
+    self.fitnesses = []
   
   def get_fitnesses(self):
     return self.fitnesses

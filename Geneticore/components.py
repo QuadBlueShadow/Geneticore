@@ -1,81 +1,88 @@
 import random as r
 from numpy import exp
+import numpy as np
 def leaky_relu(x):
   if x > 0:
     return x
   else:
     return x * 0.01
 
-class Neuron:
-  def __init__(self, num):
-    self.weights = []
+def create_nueron(n_layer):
+  weights = np.zeros(n_layer)
+  biases = np.zeros(n_layer)
 
-    for i in range(num):
-      self.weights.append(r.random())
+  #Go through each weight
+  for i in range(len(weights)):
+    #Set the modifier, are we adding or subtracting from this weight
+    modifier = 0
+    if r.randint(0, 1) == 0:
+      modifier = r.random() / 5
+    else:
+      modifier = -1 * (r.random() / 5)
 
-  def run(self, input):
-    outputs = []
+    #Change weight
+    weights[i] += modifier
 
-    #Leaky relu activation for the input, change this if you want or whatever
-    a_in = leaky_relu(input)
+    biases[i] = r.random()*r.randint(-100, 100)
 
-    #Get each individual weights output
-    for i in range(len(self.weights)):
-      outputs.append(a_in * self.weights[i])
+  return weights, biases
 
-    return outputs
+def r_adjust_n_weights(weights):
+  #Go through each weight
+  for i in range(len(weights)):
+    #Set the modifier, are we adding or subtracting from this weight
+    modifier = 0
+    if r.randint(0, 1) == 0:
+      modifier = r.random() / 5
+    else:
+      modifier = -1 * (r.random() / 5)
 
-  def random_adjust_w(self):
-    #Go through each weight
-    for i in range(len(self.weights)):
-      #Set the modifier, are we adding or subtracting from this weight
-      modifier = 0
-      if r.randint(0, 1) == 0:
-        modifier = r.random() / 5
-      else:
-        modifier = -1 * (r.random() / 5)
+    #Change weight
+    weights[i] += modifier
 
-      #Change weight
-      self.weights[i] += modifier
+  return weights
 
 class Layer:
   def __init__(self, num, n_layer):
-    self.neurons = []
-    self.n_layer = n_layer
-    self.full_output = []
+    self.weights = []
+    self.biases = []
 
-    #Create the whole layer
-    for i in range(n_layer):
-      self.full_output.append(0)
+    self.n_layer = n_layer
 
     for i in range(num):
-      new_neuron = Neuron(n_layer)
-      self.neurons.append(new_neuron)
+      weight, bias = create_nueron(n_layer)
+      self.weights.append(weight)
+      self.biases.append(bias)
+
+    self.weights = np.asarray(self.weights)
+    self.biases = np.asarray(self.biases)
 
   def run(self, inputs=[]):
+    full_output = np.zeros(self.n_layer)
     outputs = []
-
-    #Use this to store the full output going out to each neuron in the next layer
-    for i in range(len(self.full_output)):
-      self.full_output[i] = 0
 
     #Get all of the outputs of one neuron
     for i in range(len(inputs)):
-      outputs.append(self.neurons[i].run(inputs[i]))
+      outputs.append(inputs[i] * self.weights[i] + self.biases[i])
+
+    outputs = np.asarray(outputs)
 
     #In context of the next layer
     #Get all the outputs going to the neruon 0, 1, 2, 3 ...
     for i in range(len(outputs)):
       output = outputs[i]
       for o in range(len(output)):
-        self.full_output[o] += output[o]
+        full_output[o] += output[o]
 
-    return self.full_output
+    return full_output
 
   def random_adjust_n(self):
     #Randomly adjust neuron weights
-    for neuron in self.neurons:
-      neuron.random_adjust_w()
+    for weights in self.weights:
+      r_adjust_n_weights(weights)
+
+    for bias in self.biases:
+      r_adjust_n_weights(bias)
 
 class Net:
   def __init__(self, net_arr=[1, 64, 64, 1], act_parser=None):
@@ -88,9 +95,11 @@ class Net:
       if i + 2 == len(net_arr):
         break
 
+    self.layers = np.asarray(self.layers)
+
   def find_output(self, activations):
     #Take softmax activations and get the highest one
-    max = [0, 0]
+    max = np.array([0, 0])
     for i in range(len(activations)):
       if activations[i] > max[0]:
         max[0] = activations[i]

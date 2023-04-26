@@ -19,11 +19,17 @@ class DiscreteAction:
 
     return max[1]
 
-  def parse(self, activations):
+  def parse_act(self, activations):
     s_f_activations = self.softmax(activations)
     output = self.find_output(s_f_activations)
 
     return output
+  
+  def return_act_space(self):
+      return self.bins
+  
+  def parse(self, activations):
+    return self.parse_act(activations)
 
 class ContiniousAction:
   def __init__(self, range=1, graph_fun=None):
@@ -52,9 +58,6 @@ class LookupAction(DiscreteAction):
         actions = np.array(actions)
         return actions
 
-    def return_act_space(self):
-      return self.bins
-
-    def parse_actions(self, activations) -> np.ndarray:
-        action = self.parse(activations)
+    def parse(self, activations) -> np.ndarray:
+        action = self.parse_act(activations)
         return self._lookup_table[action]
