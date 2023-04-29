@@ -26,8 +26,8 @@ class Loop:
             action = net.run(obs)
             obs, reward, done, info = self.env.step(action)
 
-            net_rewardsappend(reward)
-            total_rewardsappend(reward)
+            net_rewards.append(reward)
+            total_rewards.append(reward)
         
             obs = obs.flatten()
 
@@ -60,7 +60,7 @@ class Loop:
           done = False
           truncated = False
 
-          obs, info = self.env.reset()
+          obs = self.env.reset()
 
           net_rewards = []
 
@@ -69,12 +69,12 @@ class Loop:
             action = net.run(obs)
             obs, reward, done, truncated, info = self.env.step(action)
 
-            net_rewards = np.append(net_rewards, reward)
-            total_rewards = np.append(total_rewards, reward)
+            net_rewards.append(reward)
+            total_rewards.append(reward)
         
             obs = obs.flatten()
 
-          rewards = np.append(rewards, net_rewards)
+          rewards.append(net_rewards)
 
         self.f_c.calc(rewards) #Track fitness
 
