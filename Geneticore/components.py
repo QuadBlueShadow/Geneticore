@@ -12,8 +12,7 @@ class Layer:
     self.biases = np.array([r.uniform(-1, 1) for i in range(layer_len)])
 
   def run(self, inputs: np.ndarray):
-    #Some simple math that gets this done quicker than the way Quad had (no offense Quad)
-    #ONE LINE YESSSSSSSSSSSS --CTA
+    #Some simple math that gets the layers running
     return [self.act_fun(i) for i in self.weights.dot(inputs) + self.biases]
 
   def random_adjust_n(self):
@@ -34,17 +33,17 @@ class Net:
 
   def find_output(self, activations):
     #Take softmax activations and get the highest one
-    #One line funny
     return list(activations).index(max(activations))
 
   def run(self, input):
     #Run through each layer
     for i in self.layers:
       input = i.run(input)
-    #Act parser woooo
+    #Act parser
     return self.act_parser.parse(input)
 
   def randomly_adjust_net(self):
     #Run through each net and randomly set neuron wieghts
     for layer in self.layers:
       layer.random_adjust_n()
+
